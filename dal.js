@@ -20,7 +20,7 @@ class DAL {
             projection && Object.keys(projection).forEach((columnName)=>{
                 colomnNames = colomnNames + columnName  +',';
             });
-            colomnNames = colomnNames.substring(0, colomnNames.lastIndexOf(','))
+            colomnNames = colomnNames.substring(0, colomnNames.lastIndexOf(','));
             console.log('colomnNames', colomnNames);
             
             if (colomnNames === "") {
@@ -33,29 +33,83 @@ class DAL {
             
             let sql = 'SELECT ' + colomnNames + ' from ' + tableName + ' where ' + whereClouse + ';'
             console.log(sql);
-            
-            this.client.connect(function (err, client, done) {
-                if (!err) {
-                    client.query(sql, function (err, data) {
-                        done();
-                        console.log('data >>>', data)
-                        resolve(data ? data.rows : null);
-                    })
-                } else {
-                    console.log("in query error >>>>")
-                    reject(err);
-                    console.error(err);
-                }
-
-            });
+            this.query(sql, 'read', resolve, reject);
         })
         
 
     }
-    update(tableName, constraint, update) {
+    create(tableName, createBody) {
+        return new Promise((resolve, reject)=>{
+            console.log("in create request >>>");
+            console.log(tableName, createBody);
+            let colomnNames = '(';
+            let values = '('
+            createBody && Object.keys(createBody).forEach((key) => {
+                colomnNames = colomnNames + '"' + key + '"' + ',';
+                values = values + "'" + createBody[key] + "'" + ',';
+            });
+            colomnNames = colomnNames.substring(0, colomnNames.lastIndexOf(',')) + ')';
+            values = values.substring(0, values.lastIndexOf(',')) + ')';
+            console.log('colomnNames', colomnNames);
+            console.log('values', values);
 
+            let sql = 'INSERT INTO ' + tableName + colomnNames + ' VALUES ' + values + ';';
+            console.log('sql', sql);
+            this.query(sql,'create', resolve, reject)
+        });
+        
+        
     }
-    delete(tableName, contraint) {
+    update(tableName, contraints, updates) {
+        return new Promise((resolve, reject) => {
+            let whereClouse = "";
+            let setClouse = "";
+            contraints && Object.keys(contraints).forEach((constraint) => {
+                whereClouse = whereClouse + constraint + "=" + "'" + contraints[constraint] + "'";
+            });
+            updates && Object.keys(updates).forEach((update) => {
+                setClouse = setClouse + update + "=" + "'" + updates[update] + "'";
+            });
+            let sql = 'UPDATE ' + tableName + ' SET ' + setClouse + ' WHERE ' + whereClouse + ';';
+            console.log('sql', sql);
+            this.query(sql, 'update', resolve, reject)
+        });
+    }
+    remove(tableName, contraints) {
+        return new Promise((resolve, reject) => {
+            let whereClouse = "";
+            contraints && Object.keys(contraints).forEach((constraint) => {
+                whereClouse = whereClouse + constraint + "=" + "'" + contraints[constraint] + "'";
+            });
+            let sql = 'DELETE FROM ' + tableName + ' where ' + whereClouse + ';';
+            this.query(sql, 'delete', resolve, reject);
+        });
+        
+    }
+    query(sql, operation ,resolve, reject) {
+        
+        this.client.connect(function (err, client, done) {
+            if (!err) {
+                client.query(sql, function (err, data) {
+                    done();
+                    var returnObj;
+                    console.log(data);
+                    
+                    if (operation === 'read') {
+                        returnObj = data ? data.rows : null;
+                    } else  {
+                        returnObj = data ? data.rowCount : null;
+                    }
+                    resolve(returnObj);
+                })
+            } else {
+                console.log("in query error >>>>")
+                reject(err);
+                console.error(err);
+            }
+
+        });
+        
 
     }
 }

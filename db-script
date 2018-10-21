@@ -40,3 +40,13 @@ VALUES ('8777103e-d449-11e8-b3b0-fbfb3fcceaef', 'credit', '500', '2018-10-21 13:
 
 INSERT INTO public."transactions" ("account_id", "type", "amount", "transaction_date")
 VALUES ('8777103e-d449-11e8-b3b0-fbfb3fcceaef', 'debit', '200', '2018-10-20 15:00:12')
+
+
+
+{ "account_number": "9837498731",
+    "bank": "ICICI",
+    "ifsc_code": "ICICI00080",
+	"account_id" : "8777103e-d449-11e8-b3b0-fbfb3fcceaef"
+}
+
+//32907294-d51c-11e8-980c-6f9139f3d723
