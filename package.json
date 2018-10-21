@@ -1,0 +1,12 @@
+{
+  "name": "bankWebServices",
+  "version": "1.0.0",
+  "description": "bankWebServices",
+  "dependencies": {
+    "json-validator": "*",
+    "express": "*",
+    "body-parser": "*",
+    "pg": "*",
+    "password-hash": "*"
+  }
+}

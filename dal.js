@@ -112,5 +112,8 @@ class DAL {
         
 
     }
+    releasePool() {
+        this.client.end()
+    }
 }
 module.exports = DAL;

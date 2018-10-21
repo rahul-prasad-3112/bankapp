@@ -19,10 +19,6 @@ const futureBalSchema = {
 class AccountServices {
     constructor(dbConfig) {
         global.dalInstance = new DAL(dbConfig);
-        console.log("AccountServices constructor ", this.dalInstance);
-        console.log(this);
-        //sha1$b02fd451$1$f097f2cdb45b550f502458b73a6039d5256dfeca
-        console.log(passwordHash.verify("cooldude1988", passwordHash.generate("cooldude1988")));
         
     }
     accountLogin(req, res) {
