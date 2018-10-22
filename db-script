@@ -31,15 +31,34 @@ WITH (
     OIDS = FALSE
 );
 
+CREATE TABLE public."beneficiaries"
+(
+    id text NOT NULL DEFAULT uuid_generate_v1mc(),
+    account_number text  NOT NULL,
+    account_id text  NOT NULL,
+    bank text NOT NULL,
+    ifsc_code text NOT NULL,
+    is_verified BOOLEAN NOT NULL,
+    added_on timestamp(6) NOT NULL, 
+    CONSTRAINT beneficary_pkey PRIMARY KEY (id),
+    CONSTRAINT account_number_unique UNIQUE (account_number),
+    CONSTRAINT fk_beneficiary_to_account FOREIGN KEY (account_id)
+        REFERENCES public.accounts (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+);
 
-INSERT INTO public."accounts" ("fullname", "password", "accountBalance", "username")
-VALUES ('Kumar Rahul', 'abcdef', '10000', 'rahulprasad3112')
+INSERT INTO public."accounts" ("fullname", "password", "accountbalance", "username")
+VALUES ('Kumar Rahul', 'sha1$b02fd451$1$f097f2cdb45b550f502458b73a6039d5256dfeca', '10000', 'rahulprasad3112')
 
 INSERT INTO public."transactions" ("account_id", "type", "amount", "transaction_date")
-VALUES ('8777103e-d449-11e8-b3b0-fbfb3fcceaef', 'credit', '500', '2018-10-21 13:00:12')
+VALUES ('b760679a-d5bc-11e8-9569-cb24a0cdbd8f', 'credit', '500', '2018-10-21 13:00:12')
 
 INSERT INTO public."transactions" ("account_id", "type", "amount", "transaction_date")
-VALUES ('8777103e-d449-11e8-b3b0-fbfb3fcceaef', 'debit', '200', '2018-10-20 15:00:12')
+VALUES ('b760679a-d5bc-11e8-9569-cb24a0cdbd8f', 'debit', '200', '2018-10-20 15:00:12')
 
 
 
